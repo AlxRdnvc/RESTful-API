@@ -1,0 +1,18 @@
+# Enable the URL rewriting engine
+RewriteEngine On
+
+# Set the base URL for per-directory rewrites to /api/
+RewriteBase /api/
+
+# Check if the requested URL does not correspond to an existing file
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Check if the requested URL does not correspond to an existing directory
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Check if the requested URL does not correspond to a symbolic link
+RewriteCond %{REQUEST_FILENAME} !-l
+
+# Redirect all requests that match any character to index.php
+# The [L] flag means "last," indicating that no further rules should be processed
+RewriteRule ^(.*)$ index.php [L]
