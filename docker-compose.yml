@@ -1,0 +1,49 @@
+# Docker Compose file for PHP, Apache, MySQL, and PHPMyAdmin
+# Explanation of the configuration options:
+
+# Define the version of the Docker Compose file format
+version: '3.7'
+
+# Define services for the application
+services:
+
+  # PHP and Apache environment service
+  php-apache-environment:
+    build: .  # Build the image using the Dockerfile in the current directory
+    volumes:
+      - .:/var/www/html/  # Sync local development code with the container
+    ports:
+      - 9000:80  # Map local port 9000 to container port 80
+    networks:
+      - my_network  # Connect to the custom network 'my_network'
+
+  # MySQL database service
+  db:
+    image: mysql:latest  # Use the latest MySQL image from Docker Hub
+    restart: always  # Restart the container if it stops unexpectedly
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Set the MySQL root password
+    volumes:
+      - mysql-data:/var/lib/mysql  # Mount a volume for persistent storage
+    networks:
+      - my_network  # Connect to the custom network 'my_network'
+
+  # PHPMyAdmin service
+  phpmyadmin:
+    image: phpmyadmin:latest  # Use the latest PHPMyAdmin image from Docker Hub
+    restart: always  # Restart the container if it stops unexpectedly
+    ports:
+      - '9001:80'  # Map local port 9001 to container port 80
+    environment:
+      - PMA_ARBITRARY=1  # Allow arbitrary server connection for development
+    networks:
+      - my_network  # Connect to the custom network 'my_network'
+
+# Define a custom network for inter-container communication
+networks:
+  my_network:
+    driver: bridge
+
+# Define a volume for persistent storage of MySQL data
+volumes:
+  mysql-data:
