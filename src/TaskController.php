@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class TaskController
 {
     public function processRequest(string $method, ?string $id): void
