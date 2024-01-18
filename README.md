@@ -33,15 +33,20 @@ The Docker environment includes the following services:
 PHP with Apache
 MySQL
 PHPMyAdmin for database management
-Docker Compose Instructions
-Build and Run Docker Containers:
-
 
 Stop Docker Containers:
 
 bash
 Copy code
 docker-compose down
+
+If facing error after adding .htaccess file enable rewriting:
+
+bash
+Copy code
+docker exec -it restful-api_php-apache-environment_1 a2enmod rewrite
+docker restart restful-api_php-apache-environment_1
+
 
 These instructions provide a step-by-step guide for cloning the repository, setting up the Docker environment, and accessing the PHP, Apache, MySQL, and PHPMyAdmin services.
 Users can then proceed with using and customizing the PHP RESTful API Starter Kit for their projects.
