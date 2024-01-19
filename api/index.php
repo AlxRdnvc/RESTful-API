@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require dirname(__DIR__) . "/vendor/autoload.php";
 
 set_exception_handler("ErrorHandler::handleException");
@@ -9,13 +11,9 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
-
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-
 $parts = explode("/", $path);
-
 $resource = $parts[2];
-
 $id = $parts[3] ?? null;
 
 if ($resource != 'tasks') {
@@ -26,9 +24,6 @@ if ($resource != 'tasks') {
 header("Content-type: application/json; charset=UTF-8");
 
 $database = new Database($_ENV["DB_HOST"], $_ENV["DB_NAME"], $_ENV["DB_USER"], $_ENV["DB_PASS"]);
-
-$database->getConnection();
-
-$controller = new TaskController;
-
+$taskGateway = new TaskGateway($database);
+$controller = new TaskController($taskGateway);
 $controller->processRequest($_SERVER['REQUEST_METHOD'], $id);

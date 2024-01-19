@@ -4,7 +4,7 @@ CREATE USER 'api_db_user'@'localhost';
 GRANT ALL PRIVILEGES ON api_db.* TO 'api_db_user'@'localhost';
 SET PASSWORD FOR 'api_db_user'@'localhost' = 'parolaDeTest';
 
--- create table tasks
+-- create table task
 CREATE TABLE task (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(128) NOT NULL,
@@ -13,3 +13,17 @@ CREATE TABLE task (
     PRIMARY KEY (id),
     INDEX (name)
 );
+
+-- seed the table task
+INSERT INTO task (name, priority, is_completed)
+VALUES
+    ('Complete Project Proposal', 1, FALSE),
+    ('Attend Team Meeting', 2, FALSE),
+    ('Review Code Pull Requests', 3, FALSE),
+    ('Write Monthly Report', 2, FALSE),
+    ('Plan Team Building Event', 1, TRUE),
+    ('Respond to Client Emails', 3, FALSE),
+    ('Prepare for Product Launch', 1, FALSE),
+    ('Conduct User Research', 2, FALSE),
+    ('Brainstorm New Feature Ideas', 3, FALSE),
+    ('Evaluate Competitor Products', 2, TRUE);
