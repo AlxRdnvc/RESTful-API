@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . "/vendor/autoload.php";
 
-set_exception_handler("ErrorHandler::handleException");
+set_error_handler('ErrorHandler::handleError');
+set_exception_handler('ErrorHandler::handleException');
 
 use Dotenv\Dotenv;
 
