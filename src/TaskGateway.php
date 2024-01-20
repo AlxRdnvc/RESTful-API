@@ -108,5 +108,17 @@ class TaskGateway
             return $stmt->rowCount();
         }
     }
+
+    public function delete(string $id): int
+    {
+        $query = "DELETE FROM task
+                WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->rowCount();
+    }
 }
 
