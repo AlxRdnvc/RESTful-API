@@ -27,3 +27,15 @@ VALUES
     ('Conduct User Research', 2, FALSE),
     ('Brainstorm New Feature Ideas', 3, FALSE),
     ('Evaluate Competitor Products', 2, TRUE);
+
+-- create table user for the api_key authentication
+CREATE TABLE user (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(128) NOT NULL,
+    username VARCHAR(128) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    api_key VARCHAR(32) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (username),
+    UNIQUE (api_key)
+);
