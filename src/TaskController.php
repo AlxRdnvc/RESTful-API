@@ -16,6 +16,11 @@ class TaskController
                 echo json_encode($this->taskGateway->getAll());
             } elseif ($method == "POST") {
                 $data =  (array) json_decode(file_get_contents("php://input"), true);
+                $errors = $this->getValidationErrors($data);
+                if (!empty($errors)) {
+                    $this->respondUnprocessableEntity($errors);
+                    return;
+                }
                 $id = $this->taskGateway->create($data);
                 $this->respondCreated($id);
             } else {
@@ -63,6 +68,29 @@ class TaskController
     {
         http_response_code(201);
         echo json_encode(["message" => "Task with ID $id created"]);
+    }
+
+    private function respondUnprocessableEntity(array $errors): void
+    {
+        http_response_code(422);
+        echo json_encode(["errors" => $errors]);
+    }
+
+    private function getValidationErrors(array $data): array
+    {
+        $errors = [];
+        
+        if (empty($data["name"])) {
+            $errors[] = "name is required";
+        }
+        
+        if (!empty($data["priority"])) {
+            if (filter_var($data["priority"], FILTER_VALIDATE_INT) === false) {
+                $errors[] = "priority must be an integer";
+            }
+        }
+        
+        return $errors;
     }
 }
 
