@@ -2,6 +2,8 @@
 
 class Auth
 {
+    private int $user_id;
+
     public function __construct(private UserGateway $userGateway)
     {   
     }
@@ -14,14 +16,22 @@ class Auth
             return false;
         }
         
-        $api_key = $_SERVER["HTTP_X_API_KEY"];
-
-        if ($this->userGateway->getByAPIKey($api_key) === false) {
+        $apiKey = $_SERVER["HTTP_X_API_KEY"];  
+        $user = $this->userGateway->getByAPIKey($apiKey);
+        
+        if ($user === false) {     
             http_response_code(401);
             echo json_encode(["message" => "invalid API key"]);
             return false;
-        }
+        }          
+        
+        $this->user_id = $user["id"];
+        
+        return true;  
+    }
 
-        return true;
+    public function getuser_id(): int
+    {
+        return $this->user_id;
     }
 }

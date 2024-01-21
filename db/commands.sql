@@ -39,3 +39,15 @@ CREATE TABLE user (
     UNIQUE (username),
     UNIQUE (api_key)
 );
+
+-- add foreign key relationship to link task records to user records
+ALTER TABLE task
+ADD user_id INT NOT NULL,
+ADD INDEX (user_id);
+
+UPDATE task 
+SET user_id = 1;
+
+ALTER TABLE task
+ADD FOREIGN KEY (user_id) REFERENCES user(id)
+ON DELETE CASCADE ON UPDATE CASCADE;

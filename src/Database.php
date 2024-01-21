@@ -1,29 +1,29 @@
 <?php
 
-class Database 
+class Database
 {
-    private string $host;
-    private string $dbname;
-    private string $user;
-    private string $pass;
-
-    public function __construct(string $host, string $dbname, string $user, string $pass)
-    {
-        $this->host = $host;
-        $this->dbname = $dbname;
-        $this->user = $user;
-        $this->pass = $pass;
-
+    private ?PDO $conn = null;
+    
+    public function __construct(
+        private string $host,
+        private string $name,
+        private string $user,
+        private string $password
+    ) {
     }
-
-    public function getConnection()
+    
+    public function getConnection(): PDO
     {
-        $dsn = "mysql:host={$this->host};dbname={$this->dbname};charset=utf8";
-
-        return new PDO($dsn, $this->user, $this->pass, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::ATTR_STRINGIFY_FETCHES => false
-        ]); 
+        if ($this->conn === null) {
+            $dsn = "mysql:host={$this->host};dbname={$this->name};charset=utf8";
+            
+            $this->conn = new PDO($dsn, $this->user, $this->password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false
+            ]);
+        }
+        
+        return $this->conn;
     }
 }
