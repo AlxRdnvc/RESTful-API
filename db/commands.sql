@@ -51,3 +51,11 @@ SET user_id = 1;
 ALTER TABLE task
 ADD FOREIGN KEY (user_id) REFERENCES user(id)
 ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- create refresh token table
+CREATE TABLE refresh_token (
+    token_hash VARCHAR(64) NOT NULL,
+    expires_at INT UNSIGNED NOT NULL,
+    PRIMARY KEY (token_hash),
+    INDEX (expires_at)
+);

@@ -36,24 +36,9 @@ if (!password_verify($data["password"], $user["password_hash"])) {
     exit;
 }
 
-$payload = [
-    "sub" => $user["id"],
-    "name" => $user["name"],
-    "exp" => time() + 20
-];
-
-// $access_token = base64_encode(json_encode($payload));
-
 $codec = new JWTCodec($_ENV["SECRET_KEY"]);
-$access_token = $codec->encode($payload);
 
-$refresh_token = $codec->encode([
-    "sub" => $user["id"],
-    "exp" => time() + 432000
-]);
+require __DIR__ . "/tokens.php";
 
-echo json_encode([
-    "access_token" => $access_token,
-    "refresh_token" => $refresh_token,
-]);
-
+$refreshTokenGateway = new RefreshTokenGateway($database, $_ENV["SECRET_KEY"]);
+$refreshTokenGateway->create($refresh_token, $refresh_token_expiry);
