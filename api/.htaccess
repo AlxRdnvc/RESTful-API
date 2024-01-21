@@ -16,3 +16,7 @@ RewriteCond %{REQUEST_FILENAME} !-l
 # Redirect all requests that match any character to index.php
 # The [L] flag means "last," indicating that no further rules should be processed
 RewriteRule ^(.*)$ index.php [L]
+
+# This directive captures the contents of the Authorization header and
+# sets the HTTP_AUTHORIZATION environment variable to its value.
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1

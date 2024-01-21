@@ -17,7 +17,10 @@ if ($resource != 'tasks') {
 $database = new Database($_ENV["DB_HOST"], $_ENV["DB_NAME"], $_ENV["DB_USER"], $_ENV["DB_PASS"]);
 $userGateway = new UserGateway($database);
 $auth = new Auth($userGateway);
-if (!$auth->authenticateAPIKey()) {
+// if (!$auth->authenticateAPIKey()) {
+//     exit;
+// }
+if (!$auth->authenticateAccessToken()) {
     exit;
 }
 $user_id = $auth->getuser_id();
