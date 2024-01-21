@@ -30,7 +30,16 @@ try {
 
 $user_id = $payload["sub"];
 
-$database = new Database($_ENV["DB_HOST"], $_ENV["DB_NAME"], $_ENV["DB_USER"], $_ENV["DB_PASS"]);                
+$database = new Database($_ENV["DB_HOST"], $_ENV["DB_NAME"], $_ENV["DB_USER"], $_ENV["DB_PASS"]); 
+$refreshTokenGateway = new RefreshTokenGateway($database, $_ENV["SECRET_KEY"]);
+$refresh_token = $refreshTokenGateway->getByToken($data["token"]);
+
+if ($refresh_token === false) {
+    http_response_code(400);
+    echo json_encode(["message" => "invalid token (not on whitelist)"]);
+    exit;
+}
+
 $user_gateway = new UserGateway($database);
 $user = $user_gateway->getByID($user_id);
 
@@ -41,3 +50,6 @@ if ($user === false) {
 }
 
 require __DIR__ . "/tokens.php";
+
+$refreshTokenGateway->delete($data["token"]);
+$refreshTokenGateway->create($refresh_token, $refresh_token_expiry);
